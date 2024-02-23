@@ -2,37 +2,51 @@ package main
 
 import "fmt"
 
-type NFAState struct {
-	isEnd               bool
-	transition          map[string]NFAState
-	epsilionTransitions []NFAState
+type State struct {
+	isEnd              bool
+	transition         map[string]*State
+	epsilonTransitions []*State
 }
 
-func addEpsilonTransition(from NFAState, to NFAState) {
-	from.epsilionTransitions = append(from.epsilionTransitions, to)
+func createState(isEnd bool) *State {
+	return &State{isEnd: isEnd, transition: make(map[string]*State), epsilonTransitions: []*State{}}
 }
 
-func addTransition(from NFAState, to NFAState, symbol string) {
+func addEpsilonTransition(from, to *State) {
+	from.epsilonTransitions = append(from.epsilonTransitions, to)
+}
+
+func addTransition(from, to *State, symbol string) {
 	from.transition[symbol] = to
 }
 
-func createState(env bool) NFAState {
-	return NFAState{isEnd: env}
+type NFATransitionFunc func(*State, string) (*State, error)
+
+type NFA struct {
+	Start *State
+	End   *State
 }
 
-func fromEpsilon() (NFAState, NFAState) {
-	var start NFAState = createState(false)
-	var end NFAState = createState(true)
+func fromEpsilon() NFA {
+	start := createState(false)
+	end := createState(true)
 	addEpsilonTransition(start, end)
-	return start, end
-}
-func fromSymbol(symbol string) (NFAState, NFAState) {
-	var start NFAState = createState(false)
-	var end NFAState = createState(true)
 
+	return NFA{
+		Start: start,
+		End:   end,
+	}
+}
+
+func fromSymbol(symbol string) NFA {
+	start := createState(false)
+	end := createState(true)
 	addTransition(start, end, symbol)
 
-	return start, end
+	return NFA{
+		Start: start,
+		End:   end,
+	}
 }
 
 func main() {
