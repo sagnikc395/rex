@@ -25,8 +25,53 @@ func (s *State) unshiftTransition(toState, matcher string){
 	s.transitions = append([]string{toState,matcher},s.transitions...)
 }
 
+type Matcher interface {
+	Matches(char rune) bool
+	IsEpsilon() bool
+	Label() string
+}
+
+//characterMatcher class
+type CharacterMatcher struct {
+	c rune
+}
+//constructor for CharacterMatcher
+func NewCharacterMatcher(c rune) *CharacterMatcher{
+	return &CharacterMatcher{c:c}
+}
+
+func (cm *CharacterMatcher) Matches(char rune)bool {
+	return cm.c == char
+}
+
+func (cm *CharacterMatcher) IsEpsilon() bool {
+    return false
+}
+
+func (cm *CharacterMatcher) Label() string {
+    return string(cm.c)
+}
 
 
+//epsilonmatcher class
+type EpsilonMatcher struct {}
+
+func NewEpsilonMatcher() *EpsilonMatcher {
+    return &EpsilonMatcher{}
+}
+
+// An epsilon matcher always matches
+func (em *EpsilonMatcher) Matches(char rune) bool {
+    return true
+}
+
+func (em *EpsilonMatcher) IsEpsilon() bool {
+    return true
+}
+
+func (em *EpsilonMatcher) Label() string {
+    return "ε"
+}
 
 
 
