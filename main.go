@@ -1,54 +1,40 @@
 package main
 
-import "fmt"
 
 type State struct {
-	isEnd              bool
-	transition         map[string]*State
-	epsilonTransitions []*State
+	name string
+	transitions [][]string
+	startsGroups []string
+	endsGroup []string
 }
 
-func createState(isEnd bool) *State {
-	return &State{isEnd: isEnd, transition: make(map[string]*State), epsilonTransitions: []*State{}}
-}
-
-func addEpsilonTransition(from, to *State) {
-	from.epsilonTransitions = append(from.epsilonTransitions, to)
-}
-
-func addTransition(from, to *State, symbol string) {
-	from.transition[symbol] = to
-}
-
-type NFATransitionFunc func(*State, string) (*State, error)
-
-type NFA struct {
-	Start *State
-	End   *State
-}
-
-func fromEpsilon() NFA {
-	start := createState(false)
-	end := createState(true)
-	addEpsilonTransition(start, end)
-
-	return NFA{
-		Start: start,
-		End:   end,
+func NewState(name string, transitions,startsGroups,endsGroup []string) *State {
+	return &State{
+		name : name,
+		transitions: make([][]string,1024),
+		startsGroups: make([]string,1024),
+		endsGroup: make([]string,1024),
 	}
 }
 
-func fromSymbol(symbol string) NFA {
-	start := createState(false)
-	end := createState(true)
-	addTransition(start, end, symbol)
-
-	return NFA{
-		Start: start,
-		End:   end,
-	}
+func (s *State) addTransition(toState , matcher string){
+	s.transitions = append(s.transitions, []string{matcher,toState})
 }
+
+func (s *State) unshiftTransition(toState, matcher string){
+	s.transitions = append([]string{toState,matcher},s.transitions...)
+}
+
+
+
+
+
 
 func main() {
-	fmt.Println("rex 🦖")
+	nfa := EngineNFA()
+	nfa.declareStates("q0","q1")
+	nfa.setInitialState("q0")
+	nfa.setEndingStates(["q1"])
+	nfa.addTransition("q0","q1",*CharacterMatcher("a"))
+	fmt.Printf(nfa.compute("a"))
 }
