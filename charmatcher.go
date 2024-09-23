@@ -9,11 +9,14 @@ func NewCharacterMatcher(char rune) *CharacterMatcher {
 	return &CharacterMatcher{char: char}
 }
 
-func (cm *CharacterMatcher) Matches(char rune) bool {
-	return cm.char == char
+func (cm *CharacterMatcher) Match(input string) bool {
+	if len(input) != 1 {
+		return false
+	}
+	return rune(input[0]) == cm.char
 }
 
-func (cm *CharacterMatcher) IsEpsilon() bool {
+func (cm *CharacterMatcher) isEpsilon() bool {
 	return false
 }
 
