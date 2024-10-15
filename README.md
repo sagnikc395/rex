@@ -1,6 +1,6 @@
 # rex 🦖
 
-a smol r(eg)ex (haha so funny !) engine written in Typescript.
+a smol r(eg)ex (haha so funny !) engine written in Go.
 
 ## motivation
 
