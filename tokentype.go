@@ -23,4 +23,8 @@ type parseContext struct {
 	tokens []token
 }
 
-
+type repeatPayload struct {
+	min   int
+	max   int
+	token token
+}

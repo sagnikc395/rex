@@ -14,7 +14,7 @@ func parse(regex string) *parseContext {
 		tokens: []token{},
 	}
 	for ctx.pos < len(regex) {
-		processElement(regex, ctx)
+		process(regex, ctx)
 		ctx.pos++
 	}
 
@@ -23,7 +23,7 @@ func parse(regex string) *parseContext {
 
 //process each element
 
-func processElement(regex string, ctx *parseContext) {
+func process(regex string, ctx *parseContext) {
 	ch := regex[ctx.pos]
 	if ch == '(' {
 		groupCtx := &parseContext{
