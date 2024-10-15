@@ -1,4 +1,4 @@
-class State {
+export class State {
   constructor(name) {
     this.name = name;
     this.transitions = [];

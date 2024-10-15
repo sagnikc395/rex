@@ -1,4 +1,4 @@
-import type { Matcher } from "./matcher";
+import type { Matcher } from "./Matcher";
 
 export class CharacterMatcher implements Matcher {
   c: string;

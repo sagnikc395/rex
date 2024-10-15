@@ -1,4 +1,4 @@
-import type { Matcher } from "./matcher";
+import type { Matcher } from "./Matcher";
 
 export class EpsilonMatcher implements Matcher {
   matches(char: string): boolean {
